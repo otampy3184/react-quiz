@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { fetchQuizQuestions } from './API';
 
 //各種部品をインポート
-//import QuestioCard from './components/QuestionCard'
+import QuestionCard from './components/QuestionCard'
 
 //クイズのタイプをインポート
 import { QuestionsState, Difficulty } from './API';
 
 //Stylesをインポート
-//import { GlobalStyle, Wrapper } from './App.styles';
+import { GlobalStyle, Wrapper } from './App.styles';
 
 export type AnswerObject = {
   question: string;
@@ -82,7 +82,34 @@ const App: React.FC = () => {
 
   //AppのリターンとしてHTML情報を返す
   return (
-    <h1></h1>
+    <>
+      <GlobalStyle />
+      <Wrapper>
+        <h1>REACT QUIZ</h1>
+        {gameOver || userAnswers.length === TOTAL_Question ? (
+          <button className='start' onClick={startTrivia}>
+            Start
+          </button>
+        ) : null}
+        {!gameOver ? <p className='score'>Score: {score}</p> : null}
+        {loading ? <p>Loading Questions...</p> : null}
+        {!loading && !gameOver && (
+          <QuestionCard
+            questionNr={number + 1}
+            totalQuestions={TOTAL_Question}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnswer}
+          />
+        )}
+        {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_Question - 1 ? (
+          <button className='next' onClick={nextQuestion}>
+            Next Question
+          </button>
+        ) : null}
+      </Wrapper>
+    </>
   )
 }
 
