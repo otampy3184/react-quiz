@@ -2,8 +2,9 @@ import React from 'react'
 
 import { AnswerObject } from '../App'
 
-// import { Wrapper, ButtonWrapper } from './QuestionCard.styles'
+import { Wrapper, ButtonWrapper } from './QuestionCard.styles'
 
+//propatiesの設定
 type Props = {
     question: string;
     answers: string[];
@@ -13,6 +14,7 @@ type Props = {
     totalQuestions: number;
 }
 
+//質問カードの作成
 const QuestionCard: React.FC<Props> = ({
     question,
     answers,
@@ -21,5 +23,26 @@ const QuestionCard: React.FC<Props> = ({
     questionNr,
     totalQuestions,
 }) => (
-    <div>test</div>
-)
+    <Wrapper>
+    <p className='number'>
+      Question: {questionNr} / {totalQuestions}
+    </p>
+    <p dangerouslySetInnerHTML={{ __html: question }} />
+    <div>
+      {answers.map((answer) => (
+        <ButtonWrapper
+          key={answer}
+          correct={userAnswer?.correctAnswer === answer}
+          userClicked={userAnswer?.answer === answer}
+        >
+          <button disabled={userAnswer ? true : false} value={answer} onClick={callback}>
+            <span dangerouslySetInnerHTML={{ __html: answer }} />
+          </button>
+        </ButtonWrapper>
+      ))}
+    </div>
+  </Wrapper>
+);
+
+//export
+export default QuestionCard;
